@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07394b"><meta name="description" content="抓準吊鉤方向，撈起海廢、認識污染危害，把一點善意帶進生活。">
+  <title>海洋打撈隊 · Ocean Cleanup</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2307394b'/%3E%3Cpath d='M16 5v17m-7-6c0 11 14 11 14 0M11 8h10' fill='none' stroke='%23ffce69' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./ocean-cleanup.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar"><h1>⚓ 海洋打撈隊</h1><div class="top-actions"><button id="journal-open" class="icon-button" aria-haspopup="dialog">海廢圖鑑 <span id="journal-count">0/5</span></button><button id="music" class="icon-button" aria-label="關閉背景音樂" aria-pressed="true">音樂 ON</button><label class="music-volume">音量<input id="music-volume" type="range" min="0" max="100" value="35" aria-label="背景音樂音量"></label><button id="sound" class="icon-button" aria-label="開啟音效" aria-pressed="false">音效 OFF</button></div></header>
+    <section class="game" aria-label="海洋打撈遊戲">
+      <div class="dashboard"><div class="level-info"><span class="label">目前海域</span><strong id="area">01 · 晴空海灣</strong></div><div class="score-info"><span class="label">清潔積分</span><strong><span id="score">0</span><span class="score-target"> / <span id="target">650</span></span></strong><div class="progress"><span id="progress"></span></div></div><div class="time-info"><span class="label">剩餘時間</span><strong id="time">75<span class="unit">秒</span></strong></div><button id="pause" class="icon-button" aria-label="暫停遊戲" disabled>Ⅱ</button></div>
+      <div class="ocean-wrap"><canvas id="ocean" width="1100" height="650" aria-label="按空白鍵、點擊海面或打撈按鈕放出吊鉤"></canvas><div class="sea-status"><span id="cleanup-status">本關打撈 0 件</span><small>海色與海底色彩隨打撈改善 · 生態恢復示意</small></div><div id="toast" class="toast" role="status" aria-live="polite"></div></div>
+      <div class="controlbar"><div class="hint"><span>空白鍵 / 點海面</span><small id="hook-status">抓準方向，放出吊鉤</small></div><button id="cast" class="primary" disabled>放出吊鉤 ↓</button><button id="restart" class="icon-button">重來</button></div>
+      <div id="overlay" class="overlay"><div class="overlay-card"><span class="badge" id="badge">船長，準備出航！</span><h2 id="overlay-title">每一鉤，讓海更乾淨。</h2><p id="overlay-copy">抓準方向，撈起垃圾。75 秒內收集 650 分；新種類只介紹一次，完整故事隨時到海廢圖鑑閱讀。每關結束，練習一個守護海洋的選擇。</p><div id="result-extras" hidden><div class="result-stats"><span><strong id="care-caught">0</strong> 件本關海廢</span><span><strong id="care-learned">0</strong> 種航程發現</span><span><strong id="care-released">0</strong> 次放回小魚</span></div><p id="learning-summary" class="learning-summary"></p><div class="kindness"><span class="eyebrow">每日一點善意</span><p id="kind-action-text">今天試著自備水壺或購物袋。</p><button id="kind-action-next" class="text-button">換一件我想做的小事</button></div></div><button id="start" class="primary">開始打撈</button><p class="overlay-note" id="overlay-note">小垃圾拉得快，大垃圾分數高；小心避開魚群。</p></div></div>
+    </section>
+  </main>
+  <dialog id="catch-lesson" class="catch-lesson" aria-labelledby="lesson-title" aria-describedby="lesson-impact">
+    <header class="lesson-header"><span id="lesson-icon" aria-hidden="true"></span><div><p id="lesson-badge"></p><h2 id="lesson-title"></h2></div></header>
+    <div class="lesson-body">
+      <section><h3>認識一件海廢</h3><p id="lesson-impact"></p></section>
+      <section class="lesson-action"><h3>我可以做的一件事</h3><p id="lesson-action"></p></section>
+      <p id="good-deed" class="lesson-paused">做好事不必等大事，從帶走一件垃圾開始。</p>
+      <p class="lesson-paused">時間已暫停，這件垃圾已計分。完整事件、來源與脈絡已收錄在海廢圖鑑。</p>
+    </div>
+    <div class="lesson-footer"><span>本趟航程只介紹一次</span><button id="lesson-continue" class="primary">知道了，繼續打撈</button></div>
+  </dialog>
+  <dialog id="journal" class="reading-dialog" aria-labelledby="journal-title">
+    <header class="reading-header"><div><span class="eyebrow">海洋觀察筆記</span><h2 id="journal-title">海廢圖鑑</h2></div><button id="journal-close" class="icon-button">關閉圖鑑</button></header>
+    <p id="journal-progress" class="reading-note"></p>
+    <nav id="journal-tabs" class="journal-tabs" aria-label="選擇海廢種類"></nav>
+    <article class="journal-story"><span id="journal-badge" class="eyebrow"></span><h3 id="journal-story-title"></h3><p id="journal-impact"></p><div class="lesson-action"><h4>把善意帶進生活</h4><p id="journal-action"></p></div><h4>真實事件與來源</h4><a id="journal-link" target="_blank" rel="noopener noreferrer"></a><p id="journal-source" class="reading-note"></p><h4>閱讀脈絡</h4><p id="journal-note" class="reading-note"></p></article>
+  </dialog>
+  <dialog id="quiz" class="reading-dialog quiz-dialog" aria-labelledby="quiz-title" aria-describedby="quiz-intro">
+    <span id="quiz-badge" class="eyebrow"></span><h2 id="quiz-title">把善意化成選擇</h2><p id="quiz-intro" class="reading-note">打撈已結束，時間已停止。選一個做法，再看看原因；答案不影響清潔積分。</p>
+    <fieldset class="quiz-fieldset"><legend id="quiz-question"></legend><div id="quiz-options" class="quiz-options"></div></fieldset>
+    <p id="quiz-feedback" class="quiz-feedback" role="status" aria-live="polite" hidden></p>
+    <button id="quiz-continue" class="primary" disabled>查看本關成果</button>
+  </dialog>
+  <dialog id="personal-action" class="reading-dialog" aria-labelledby="action-title">
+    <header class="reading-header"><div><span class="eyebrow">把遊戲裡的善意帶上岸</span><h2 id="action-title">🌊 個人海洋行動 AI</h2></div><button id="action-close" class="icon-button">關閉</button></header>
+    <p id="action-context" class="reading-note"></p>
+    <form id="action-form" class="action-form">
+      <label>我的生活角色<select name="role"><option>學生</option><option>上班族</option><option>家庭照顧者</option><option>其他</option></select></label>
+      <label>我常遇到的情境<select name="habit"><option>常買外帶飲料或餐點</option><option>購物時常使用塑膠袋</option><option>想把垃圾分類做好</option><option>偶爾去海邊走走</option></select></label>
+      <label>今天可以投入<select name="time"><option>5 分鐘</option><option>15 分鐘</option><option>30 分鐘</option></select></label>
+      <label>想補充的習慣或困難（選填）<textarea name="note" maxlength="300" rows="2" placeholder="例如：常忘記帶水壺，希望從簡單的事開始。"></textarea></label>
+      <p class="reading-note">產生時會將上述選項、補充內容與本趟遊戲統計傳送給 OpenAI。請勿填寫姓名、電話等個人資料。</p>
+      <button id="action-generate" class="primary" type="submit">產生我的海洋行動</button>
+    </form>
+    <p id="action-status" class="reading-note" role="status" aria-live="polite"></p>
+    <section id="action-result" class="lesson-action" hidden><span id="action-source" class="eyebrow"></span><p id="action-plan"></p><button id="action-complete" class="primary">我完成了這個行動 ✓</button><p id="action-record" class="reading-note" role="status"></p></section>
+  </dialog>
+  <script type="module" src="./ocean-cleanup.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+# Publish only the standalone frontend, its documentation, and focused tests.
+*
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/index.html
+!/ocean-cleanup.css
+!/ocean-cleanup.js
+!/tests/
+/tests/*
+!/tests/game-flow.test.cjs
